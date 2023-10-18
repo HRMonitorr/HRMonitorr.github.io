@@ -1,9 +1,9 @@
 {
-  "name": "godocs-bulma",
+  "name": "hrm",
   "version": "1.0.0",
-  "description": "godocs free bulma documentation template",
+  "description": "hrm aplication",
   "author": "Themefisher",
-  "license": "MIT",
+  "license": "",
   "scripts": {
     "dev": "gulp",
     "build": "gulp build"

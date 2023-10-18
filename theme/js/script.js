@@ -1,14 +1,8 @@
-/**
- * WEBSITE: https://themefisher.com
- * TWITTER: https://twitter.com/themefisher
- * FACEBOOK: https://www.facebook.com/themefisher
- * GITHUB: https://github.com/themefisher/
- */
 
 (function ($) {
 	'use strict';
 
-	// Preloader js    
+	// Preloader js
 	$(window).on('load', function () {
 		$('.preloader').fadeOut(100);
 
@@ -77,8 +71,8 @@
 
       $(this).attr('data-hidden', $(this).attr('data-hidden') === 'true' ? 'false' : 'true');
 	});
-	
-	
+
+
 	// tab
 	$('.tab-content').find('.tab-pane').each(function (idx, item) {
 		var navTabs = $(this).closest('.code-tabs').find('.nav-tabs'),
@@ -104,7 +98,7 @@
 		tab.addClass('active');
 		tabPane.addClass('active');
 	});
-	
+
    // JSAccordion/Collapse
 	$.fn.collapsible = function() {
 		var ns = {
