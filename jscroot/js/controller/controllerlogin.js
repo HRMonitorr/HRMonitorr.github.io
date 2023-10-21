@@ -1,16 +1,13 @@
-import { get, postWithBearer } from "https://jscroot.github.io/api/croot.js";
-import { PostLogin, responseData, ResponseLogin} from "../config/config.js";
-import { JSONlink,  tokenlogin, URLLogin } from "../template/template.js";
-
-get(JSONlink, responseData);
+import { postWithBearer } from "https://jscroot.github.io/api/croot.js";
+import { PostLogin, ResponseLogin } from "../config/config.js";
+import { URLLogin, tokenlogin } from "../template/template.js";
 
 document.addEventListener("DOMContentLoaded", function() {
-    const form = document.querySelector("formlogin");
+  const form = document.getElementById("formlogin");
 
-    form.addEventListener("submit", function(event) {
-        event.preventDefault();
-        let data = PostLogin();
-        postWithBearer(URLLogin, tokenlogin, data, ResponseLogin)
-    });
+  form.addEventListener("submit", function(event) {
+    event.preventDefault();
+    let data = PostLogin();
+    postWithBearer(URLLogin, tokenlogin, data, ResponseLogin);
+  });
 });
-

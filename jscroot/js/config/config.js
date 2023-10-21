@@ -15,8 +15,7 @@ export function GetDataForm(){
             return data
 }
 //login
-export function PostLogin(){
-
+export function PostLogin() {
   const username = document.getElementById("username").value;
   const password = document.getElementById("password").value;
   const role = document.getElementById("role").value;
@@ -25,21 +24,30 @@ export function PostLogin(){
     username: username,
     password: password,
     role: role
-};
-return data
+  };
+  return data;
 }
+
 export function AlertPost(value){
     alert(value.message + "\nRegistrasi Berhasil")
     window.location.reload();
 }
-export function AlertLogin(value){
-  alert(value.message + "\nLogin Berhasil")
-  window.location.reload();
+
+export function LoginResponseFunction(response) {
+  if (response.success) {
+    console.log('Login berhasil');
+    const userData = response.user; // Data pengguna dari respons
+    // Lakukan tindakan setelah login berhasil, seperti mengarahkan pengguna ke halaman selanjutnya atau menampilkan data pengguna
+    console.log('Data Pengguna:', userData);
+  } else {
+    console.log('Login gagal:', response.message);
+  }
 }
+
 export function ResponsePost(result) {
     AlertPost(result);
 }
 
 export function ResponseLogin(result) {
-  AlertLogin(result);
+  LoginResponseFunction(result);
 }
