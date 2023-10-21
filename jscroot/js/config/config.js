@@ -40,7 +40,7 @@ export function LoginResponseFunction(response) {
     // Lakukan tindakan setelah login berhasil, seperti mengarahkan pengguna ke halaman selanjutnya atau menampilkan data pengguna
     console.log('Data Pengguna:', userData);
   } else {
-    console.log('Login gagal:', response.message);
+    console.log(':', response.message);
   }
 }
 
