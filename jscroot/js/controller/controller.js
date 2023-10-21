@@ -1,8 +1,7 @@
-import { get, postWithBearer } from "https://jscroot.github.io/api/croot.js";
-import {GetDataForm, responseData, ResponsePost} from "../config/config.js";
-import { JSONlink, token, URLPost } from "../template/template.js";
+import { postWithBearer } from "https://jscroot.github.io/api/croot.js";
+import {GetDataForm,  ResponsePost} from "../config/config.js";
+import { token, URLPost } from "../template/template.js";
 
-get(JSONlink, responseData);
 
 document.addEventListener("DOMContentLoaded", function() {
     const form = document.querySelector("form");
