@@ -15,6 +15,6 @@ document.addEventListener("DOMContentLoaded", function() {
     setTimeout(function() {
       let data = PostLogin();
       postWithBearer(URLLogin, token, data, ResponseLogin);
-    }, 1000); // Menggunakan timeout untuk memastikan token telah diambil
+    }, 1000000000000000); // Menggunakan timeout untuk memastikan token telah diambil
   });
 });

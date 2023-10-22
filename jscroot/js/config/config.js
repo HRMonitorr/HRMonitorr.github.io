@@ -54,7 +54,7 @@ export function LoginResponseFunction(response) {
   } else {
     console.log("Login Berhasil:", response.message);
     alert(response.message + "\Login Berhasil")
-    window.location.href= "dashboard/home.html"
+    // window.location.href= "dashboard/home.html"
   }
 }
 export function ResponseToken(tokenData) {
