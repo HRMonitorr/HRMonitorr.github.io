@@ -1,4 +1,4 @@
-// token
+import { setCookieWithExpireHour } from 'https://jscroot.github.io/cookie/croot.js';
 
 //token
 export function getTokenFromAPI() {
@@ -45,25 +45,15 @@ export function AlertPost(value){
     window.location.href= "login.html"
 }
 
-export function LoginResponseFunction(response) {
-  if (response.success) {
-    console.log('Login berhasil');
-    userToken = response.token;
-    console.log('Token Pengguna:', userToken);
 
+function ResponsePostLogin(response) {
+  if (response && response.token) {
+    console.log('Token User:', response.token);
+    setCookieWithExpireHour('user_token', response.token, 2);
+    window.location.href = 'dashboard/home.html';
+    alert("Selamat Datang")
   } else {
-    console.log("Login Berhasil:", response.message);
-    alert(response.message + "\Login Berhasil")
-    // window.location.href= "dashboard/home.html"
-  }
-}
-export function ResponseToken(tokenData) {
-  if (tokenData.token) {
-    console.log('Token dari API:', tokenData.token);
-    userToken = tokenData.token;
-
-  } else {
-    console.log('Token tidak ditemukan dalam respons');
+    alert('Login gagal. Silakan coba lagi.');
   }
 }
 
@@ -71,8 +61,6 @@ export function ResponseToken(tokenData) {
 export function ResponsePost(result) {
     AlertPost(result);
 }
-
 export function ResponseLogin(result) {
-  LoginResponseFunction(result);
-  ResponseToken(result);
+  ResponsePostLogin(result)
 }
