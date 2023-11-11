@@ -1,9 +1,9 @@
 {
-  "name": "hrm",
+  "name": "orbitor-bulma",
   "version": "1.0.0",
-  "description": "hrm aplication",
+  "description": "orbitor free bulma agency template",
   "author": "Themefisher",
-  "license": "",
+  "license": "MIT",
   "scripts": {
     "dev": "gulp",
     "build": "gulp build"
