@@ -8,15 +8,19 @@
   <!-- mobile responsive meta -->
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <!-- theme meta -->
-  <meta name="theme-name" content="godocs-bulma" />
+  <meta name="theme-name" content="hr-monitoring" />
+  <!-- ** Plugins Needed for the Project ** -->
   <!-- plugins -->
   <link rel="stylesheet" href="plugins/bulma/bulma.min.css">
   <link rel="stylesheet" href="plugins/themify-icons/themify-icons.css">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
   <!-- Main Stylesheet -->
   <link href="css/style.css" rel="stylesheet">
   <!--Favicon-->
   <link rel="shortcut icon" href="images/favicon.png" type="image/x-icon">
-  <link rel="icon" href="images/favicon.png" type="image/x-icon">
+  <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+
 </head>
 
 <body>
@@ -51,55 +55,6 @@
     </div>
  </nav>
 
-  <section class="section">
-    <div class="container">
-      <div class="columns is-desktop is-justify-content-center">
-         <div class="column is-8-desktop">
-            <div class="p-6 shadow rounded content">
-               <h2 class="section-title">Silahkan Ajukan Pertanyaan Anda</h2>
-               <form method="POST" action="#">
-                  <div class="columns is-multiline">
-                     <div class="form-group column is-6-desktop">
-                        <label for="fname">Nama Depan</label>
-                        <input type="text" class="input" id="fname" name="fname" placeholder="Nama Depan Kamu"
-                           required>
-                     </div>
-                     <div class="form-group column is-6-desktop">
-                        <label for="lname">Nama Belakang</label>
-                        <input type="text" class="input" id="lname" name="lname" placeholder="Nama Belakang Kamu">
-                     </div>
-                     <div class="form-group column is-12">
-                        <label for="email">Email Anda</label>
-                        <input type="email" class="input" id="email" name="email" placeholder="Email Kamu"
-                           required>
-                     </div>
-                     <div class="form-group column is-12">
-                        <label for="reason">Kontak Yang Dituju</label>
-                        <select id="reason" class="input custom-select" name="reason" required>
-                           <option selected disabled>Choose Your Reason</option>
-                           <option value="business">Business</option>
-                           <option value="ticket">Ticket</option>
-                           <option value="project">Project</option>
-                        </select>
-                     </div>
-                     <div class="form-group column is-12">
-                        <label for="message">Kirimkan Pesan Anda Disini</label>
-                        <textarea name="message" id="message" class="input"
-                           placeholder="Pesan Kamu ..."></textarea>
-                     </div>
-                     <div class="column is-12">
-                        <button type="submit" class="btn btn-primary">Send</button>
-                     </div>
-                  </div>
-               </form>
-            </div>
-         </div>
-      </div>
-   </div>
-  </section>
-
-
-
   <footer>
     <div class="container">
       <div class="columns is-multiline is-align-items-center border-bottom py-5">
@@ -112,7 +67,7 @@
         </div>
         <div class="column is-4-desktop is-12-tablet">
           <a class="navbar-brand is-justify-content-center" href="/index.html">
-            <img class="img-fluid" src="images/logo.png"  height="200" width="200" alt="Hugo documentation theme">
+            <img class="img-fluid" src="images/logo.png" height="200" width="200" alt="Hugo documentation theme">
           </a>
         </div>
         <div class="column is-4-desktop is-12-tablet">
@@ -125,10 +80,11 @@
         </div>
       </div>
       <div class="py-4 has-text-centered">
-        <small class="text-light">Human Resource Monitor &amp;   Developed By <a
-            href="https://themefisher.com">Our Team</a></small>
+        <small class="text-light">Human Resource Monitor &amp; Developed By <a href="https://themefisher.com">Our
+            Team</a></small>
       </div>
   </footer>
+
   <!-- plugins -->
   <script src="plugins/jQuery/jquery.min.js"></script>
   <script src="plugins/masonry/masonry.min.js"></script>
@@ -137,6 +93,8 @@
 
   <!-- Main Script -->
   <script src="js/script.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/gh/HRMonitorr/js-hrm@cc40ad5ab8c53a8a73bc8e3560b4f1a131b669ac/jscroot/js/controller/controller_login.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/gh/HRMonitorr/js-hrm@cc40ad5ab8c53a8a73bc8e3560b4f1a131b669ac/jscroot/js/controller/controller_button.js"></script>
 </body>
 
 </html>
