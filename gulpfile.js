@@ -1,197 +1,100 @@
-"use strict";
+// Gulp file
+const { src, dest, watch, series, parallel } = require('gulp');
+const del                  = require('del');
+const browserSync          = require('browser-sync');
+const postcss              = require('gulp-postcss');
+const concat               = require('gulp-concat');
+const tersers              = require('gulp-terser');
+const cleanCSS             = require('gulp-clean-css');
+const purgecss             = require('gulp-purgecss');
+const logSymbols           = require('log-symbols');
 
-const sass = require("gulp-sass")(require("sass"));
-const gulp = require("gulp");
-const gutil = require("gulp-util");
-const sourcemaps = require("gulp-sourcemaps");
-const fileinclude = require("gulp-file-include");
-const autoprefixer = require("gulp-autoprefixer");
-const bs = require("browser-sync").create();
-const rimraf = require("rimraf");
-const comments = require("gulp-header-comment");
-const jshint = require("gulp-jshint");
+//Load Previews on Browser on dev
+function livePreview(done){
+  browserSync.init({
+    files: "./*.html",
+    startPath: "./",
+    server: {
+      baseDir: "./",
+    },
+    port: 3100 || 5000
+  });
+  done();
+}
+function watchFiles(){
+  watch("./*.html",series(devStyles,previewReload));
+  watch(["./tailwind.config.js", "./src/tailwind/**/*"],series(devStyles, previewReload));
+  watch("./src/js/theme.js",series(previewReload));
+  console.log("\n\t" + logSymbols.info,"Watching for Changes..\n");
+}
+// reload
+function previewReload(done){
+  console.log("\n\t" + logSymbols.info,"Reloading Browser Preview.\n");
+  browserSync.reload();
+  done();
+}
+// delete dist
+function devClean(){
+  console.log("\n\t" + logSymbols.info,"Cleaning dist folder for fresh start.\n");
+  return del(["./dist"]);
+}
+// generate css
+function devStyles(){
+  const tailwindcss = require('tailwindcss'); 
+  return src("./src/tailwind/tailwindcss.css")
+    .pipe(postcss([
+      tailwindcss("./tailwind.config.js"),
+      require('autoprefixer'),
+    ]))
+    .pipe(concat({ path: 'style.css'}))
+    .pipe(dest("./src/css"));
+}
+// minify css
+function prodStyles(){
+  return src("./src/css/style.css")
+  .pipe(concat('style.css'))
+  .pipe(cleanCSS({compatibility: 'ie8'}))
+  .pipe(dest("./dist/css"));
+}
+// minify js
+function prodScripts(){
+  return src([
+   "src/vendors/glightbox/dist/js/glightbox.min.js",
+   "src/vendors/@splidejs/splide/dist/js/splide.min.js",
+   "src/vendors/typed.js/lib/typed.min.js",
+   "src/vendors/wow.js/dist/wow.min.js",
+   "src/vendors/smooth-scroll/dist/smooth-scroll.polyfills.min.js",
+    "src/js/theme.js"
+  ])
+  .pipe(concat({ path: 'scripts.js'}))
+  .pipe(tersers())
+  .pipe(dest("./dist/js"));
+}
+// finish log
+function buildFinish(done){
+  console.log("\n\t" + logSymbols.info,`Production is complete.\n`);
+  done();
+}
+// Clean vendors
+function cleanvendor() {
+  return del(["./src/vendors/"]);
+}
+// Copy File from vendors
+function copyvendors() {
+  return src([
+    './node_modules/*glightbox/**/*',
+    './node_modules/*wow.js/**/*',
+    './node_modules/*@splidejs/splide/**/*',
+    './node_modules/*smooth-scroll/**/*',
+    './node_modules/*typed.js/**/*'
+  ])
+  .pipe( dest('./src/vendors/'))
+}
 
-var path = {
-  src: {
-    html: "source/*.html",
-    others: "source/*.+(php|ico|png)",
-    htminc: "source/partials/**/*.htm",
-    incdir: "source/partials/",
-    plugins: "source/plugins/**/*.*",
-    js: "source/js/*.js",
-    scss: "source/scss/**/*.scss",
-    images: "source/images/**/*.+(png|jpg|gif|svg)",
-    fonts: "source/fonts/**/*.+(eot|ttf|woff|woff2|otf)",
-  },
-  build: {
-    dir: "theme/",
-  },
-};
-
-// HTML
-gulp.task("html:build", function () {
-  return gulp
-    .src(path.src.html)
-    .pipe(
-      fileinclude({
-        basepath: path.src.incdir,
-      })
-    )
-    .pipe(
-      comments(`
-    WEBSITE: https://themefisher.com
-    TWITTER: https://twitter.com/themefisher
-    FACEBOOK: https://www.facebook.com/themefisher
-    GITHUB: https://github.com/themefisher/
-    `)
-    )
-    .pipe(gulp.dest(path.build.dir))
-    .pipe(
-      bs.reload({
-        stream: true,
-      })
-    );
-});
-
-// SCSS
-gulp.task("scss:build", function () {
-  return gulp
-    .src(path.src.scss)
-    .pipe(sourcemaps.init())
-    .pipe(
-      sass({
-        outputStyle: "expanded",
-      }).on("error", sass.logError)
-    )
-    .pipe(autoprefixer())
-    .pipe(sourcemaps.write("/"))
-    .pipe(
-      comments(`
-    WEBSITE: https://themefisher.com
-    TWITTER: https://twitter.com/themefisher
-    FACEBOOK: https://www.facebook.com/themefisher
-    GITHUB: https://github.com/themefisher/
-    `)
-    )
-    .pipe(gulp.dest(path.build.dir + "css/"))
-    .pipe(
-      bs.reload({
-        stream: true,
-      })
-    );
-});
-
-// Javascript
-gulp.task("js:build", function () {
-  return gulp
-    .src(path.src.js)
-    .pipe(jshint("./.jshintrc"))
-    .pipe(jshint.reporter("jshint-stylish"))
-    .on("error", gutil.log)
-    .pipe(
-      comments(`
-  WEBSITE: https://themefisher.com
-  TWITTER: https://twitter.com/themefisher
-  FACEBOOK: https://www.facebook.com/themefisher
-  GITHUB: https://github.com/themefisher/
-  `)
-    )
-    .pipe(gulp.dest(path.build.dir + "js/"))
-    .pipe(
-      bs.reload({
-        stream: true,
-      })
-    );
-});
-
-// Images
-gulp.task("images:build", function () {
-  return gulp
-    .src(path.src.images)
-    .pipe(gulp.dest(path.build.dir + "images/"))
-    .pipe(
-      bs.reload({
-        stream: true,
-      })
-    );
-});
-
-// fonts
-gulp.task("fonts:build", function () {
-  return gulp
-    .src(path.src.fonts)
-    .pipe(gulp.dest(path.build.dir + "fonts/"))
-    .pipe(
-      bs.reload({
-        stream: true,
-      })
-    );
-});
-
-// Plugins
-gulp.task("plugins:build", function () {
-  return gulp
-    .src(path.src.plugins)
-    .pipe(gulp.dest(path.build.dir + "plugins/"))
-    .pipe(
-      bs.reload({
-        stream: true,
-      })
-    );
-});
-
-// Other files like favicon, php, sourcele-icon on root directory
-gulp.task("others:build", function () {
-  return gulp.src(path.src.others).pipe(gulp.dest(path.build.dir));
-});
-
-// Clean Build Folder
-gulp.task("clean", function (cb) {
-  rimraf("./theme", cb);
-});
-
-// Watch Task
-gulp.task("watch:build", function () {
-  gulp.watch(path.src.html, gulp.series("html:build"));
-  gulp.watch(path.src.htminc, gulp.series("html:build"));
-  gulp.watch(path.src.scss, gulp.series("scss:build"));
-  gulp.watch(path.src.js, gulp.series("js:build"));
-  gulp.watch(path.src.images, gulp.series("images:build"));
-  gulp.watch(path.src.fonts, gulp.series("fonts:build"));
-  gulp.watch(path.src.plugins, gulp.series("plugins:build"));
-});
-
-// Dev Task
-gulp.task(
-  "default",
-  gulp.series(
-    "clean",
-    "html:build",
-    "js:build",
-    "scss:build",
-    "images:build",
-    "fonts:build",
-    "plugins:build",
-    "others:build",
-    gulp.parallel("watch:build", function () {
-      bs.init({
-        server: {
-          baseDir: path.build.dir,
-        },
-      });
-    })
-  )
-);
-
-// Build Task
-gulp.task(
-  "build",
-  gulp.series(
-    "html:build",
-    "js:build",
-    "scss:build",
-    "images:build",
-    "fonts:build",
-    "plugins:build"
-  )
+exports.updatevendors = series(cleanvendor, copyvendors);
+exports.default = series( devClean, devStyles, livePreview, watchFiles);
+exports.prod = series(
+  devClean,
+  parallel(prodStyles, prodScripts), //Run All tasks in parallel
+  buildFinish
 );
